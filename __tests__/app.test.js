@@ -13,13 +13,13 @@ describe('backend-express-template routes', () => {
     const res = await request(app).get('/api/v1/github/login');
 
     expect(res.header.location).toMatch(
-      /https:\/\/github.com\/login\/oauth\/authorize?client_id=[\w\d]+&scope=user&redirect_uri=http:\/\/localhost:7890\/api\/v1\/github\/login\/callback/i
+      /https:\/\/github.com\/login\/oauth\/authorize\?client_id=[\w\d]+&scope=user&redirect_uri=http:\/\/localhost:7890\/api\/v1\/github\/callback/i
     );
   });
 
   it('/ should login and redirect users to /api/v1/github/dashboard', async () => {
     const res = await request.agent(app)
-      .get('/api/vq/github/callback?code=42')
+      .get('/api/vq/github/callback')
       .redirects(1);
 
     expect(res.body).toEqual({
