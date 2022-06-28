@@ -11,13 +11,22 @@ describe('backend-express-template routes', () => {
   });
 
   it('/ prevents user from seeing posts unless logged in', async () => {
-    const res = await request(app).get('/api/v1/posts');
+    const res = await request.agent(app).get('/api/v1/posts');
 
-    expect(res.body.length).toEqual({ message: 'Kindly sign in to continue further.', status: 401 });
+    expect(res.body).toEqual({ message: 'Kindly sign in to continue further.', status: 401 });
   });
 
-  
+  it('POST / allows a user to post a secret', async () => {
+    const res = await request.agent(app)
+      .post('/api/v1/posts')
+      .send({ description: 'Super secret' });
 
+    expect(res.body).toEqual({ 
+      id: expect.any(String),
+      description: 'Super secret', 
+      created_at: expect.any(Number)
+    });
+  });
 
 
   afterAll(() => {
